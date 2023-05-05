@@ -54,22 +54,3 @@ const HeaderComponent = () => {
 };
 
 export default HeaderComponent;
-
-<div className="d-inline-flex">
-  <select className="form-control w-auto" id="locationInput" name="location">
-    <option value="">Select Location</option>
-    {itemLocations.map((location) => (
-      <option key={location} value={location}>
-        {location}
-      </option>
-    ))}
-  </select>
-  <select className="form-control w-auto" id="filterInput" name="fitler">
-    <option value="">Sort by</option>
-    {sortingOptions.map((location) => (
-      <option key={location} value={location}>
-        {location}
-      </option>
-    ))}
-  </select>
-</div>;
