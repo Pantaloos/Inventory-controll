@@ -3,7 +3,7 @@ import Pagination from "react-bootstrap/Pagination";
 import axios from "axios";
 
 interface Item {
-  id: number;
+  id: string;
   name: string;
   location: string;
   price: number;
@@ -44,6 +44,12 @@ const ItemsTable = () => {
   function handlePageClick(pageNumber: number) {
     setCurrentPage(pageNumber);
   }
+
+  const handleDeleteItem = (itemID: string) => {
+    axios.delete(`http://localhost:5000/items/${itemID}`).then(() => {
+      window.location.reload();
+    });
+  };
 
   if (numPages <= maxButtons) {
     for (let i = 1; i <= numPages; i++) {
@@ -136,7 +142,7 @@ const ItemsTable = () => {
                   type="button"
                   className="btn btn-secondary"
                   onClick={() => {
-                    console.log("you clicked me");
+                    handleDeleteItem(item.id);
                   }}
                 >
                   Delete

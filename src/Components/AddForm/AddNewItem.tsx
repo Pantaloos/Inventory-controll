@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -47,7 +48,9 @@ const AddNewItem = () => {
       return;
     }
 
-    // TODO: Submit itemData to the database
+    axios
+      .post("http://localhost:5000/items", itemData)
+      .then((response) => setItemData(response.data.id));
 
     setItemData({
       name: "",
@@ -96,6 +99,7 @@ const AddNewItem = () => {
           id="priceInput"
           name="price"
           value={itemData.price}
+          min="0"
           onChange={handleInputChange}
         />
       </div>
