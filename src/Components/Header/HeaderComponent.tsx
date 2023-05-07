@@ -48,6 +48,15 @@ const HeaderComponent = () => {
             </option>
           ))}
         </select>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => {
+            console.log("u clicked me");
+          }}
+        >
+          Sort
+        </button>
       </div>
     </div>
   );
