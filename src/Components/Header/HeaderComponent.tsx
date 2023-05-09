@@ -1,3 +1,4 @@
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const itemLocations = [
@@ -14,8 +15,34 @@ const sortingOptions = [
   "Price Descending",
 ];
 
-const HeaderComponent = () => {
+const HeaderComponent = (props: any) => {
+  const [filterValue, setFilterValue] = useState("");
+  const [sortingValues, setSortingValues] = useState({});
   const navigate = useNavigate();
+
+  function onFilterValueChange(e: ChangeEvent<HTMLSelectElement>) {
+    setFilterValue(e.target.value);
+  }
+  function onSortingValueChange(e: ChangeEvent<HTMLSelectElement>) {
+    setSortingValues(e.target.value);
+  }
+  const handeSubmit = (e: any) => {
+    let sortingOptions = {};
+    switch (sortingValues) {
+      case "Title Ascending":
+        sortingOptions = { order: "ASC", columnName: "name" };
+        break;
+      case "Title Descending":
+        sortingOptions = { order: "DESC", columnName: "name" };
+        break;
+      case "Price Ascending":
+        sortingOptions = { columnName: "price", order: "ASC" };
+        break;
+      case "Price Descending":
+        sortingOptions = { columnName: "price", order: "DESC" };
+    }
+    props.onSubmit(filterValue, sortingOptions);
+  };
   return (
     <div className="d-flex flex-row justify-content-between">
       <div>
@@ -32,6 +59,7 @@ const HeaderComponent = () => {
           className="form-control w-auto"
           id="locationInput"
           name="location"
+          onChange={onFilterValueChange}
         >
           <option value="">Select Location</option>
           {itemLocations.map((location) => (
@@ -40,7 +68,12 @@ const HeaderComponent = () => {
             </option>
           ))}
         </select>
-        <select className="form-control w-auto" id="filterInput" name="fitler">
+        <select
+          className="form-control w-auto"
+          id="filterInput"
+          name="fitler"
+          onChange={onSortingValueChange}
+        >
           <option value="">Sort by</option>
           {sortingOptions.map((location) => (
             <option key={location} value={location}>
@@ -48,13 +81,7 @@ const HeaderComponent = () => {
             </option>
           ))}
         </select>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => {
-            console.log("u clicked me");
-          }}
-        >
+        <button type="submit" className="btn btn-primary" onClick={handeSubmit}>
           Sort
         </button>
       </div>
