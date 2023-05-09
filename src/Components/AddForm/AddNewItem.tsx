@@ -49,7 +49,7 @@ const AddNewItem = () => {
     }
 
     axios
-      .post("http://localhost:5000/items", itemData)
+      .post("http://localhost:5000/inventory", itemData)
       .then((response) => setItemData(response.data.id));
 
     setItemData({
