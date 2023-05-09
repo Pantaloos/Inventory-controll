@@ -16,7 +16,7 @@ const ItemsTable = (props: any) => {
           <tr>
             <th>Name</th>
             <th>Location</th>
-            <th>Price</th>
+            <th>Price (₾)</th>
             <th>Operations</th>
           </tr>
         </thead>
