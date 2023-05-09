@@ -15,7 +15,7 @@ const sortingOptions = [
   "Price Descending",
 ];
 
-const HeaderComponent = (props: any) => {
+const Header = (props: any) => {
   const [filterValue, setFilterValue] = useState("");
   const [sortingValues, setSortingValues] = useState({});
   const navigate = useNavigate();
@@ -30,10 +30,10 @@ const HeaderComponent = (props: any) => {
     let sortingOptions = {};
     switch (sortingValues) {
       case "Title Ascending":
-        sortingOptions = { order: "ASC", columnName: "name" };
+        sortingOptions = { columnName: "name", order: "ASC" };
         break;
       case "Title Descending":
-        sortingOptions = { order: "DESC", columnName: "name" };
+        sortingOptions = { columnName: "name", order: "DESC" };
         break;
       case "Price Ascending":
         sortingOptions = { columnName: "price", order: "ASC" };
@@ -89,4 +89,4 @@ const HeaderComponent = (props: any) => {
   );
 };
 
-export default HeaderComponent;
+export default Header;
