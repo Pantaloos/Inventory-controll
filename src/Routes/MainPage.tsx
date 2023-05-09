@@ -1,7 +1,8 @@
 import axios from "axios";
-import HeaderComponent from "../Components/Header/HeaderComponent";
+import Header from "../Components/Header/Header";
 import ItemsTable from "../Components/ItemsTable/ItemsTable";
 import { useState, useEffect } from "react";
+import Footer from "../Components/Footer/Footer";
 
 interface Item {
   id: string;
@@ -41,22 +42,22 @@ const MainPage = () => {
         },
       })
       .then((response) => {
-        const newUsers = response.data.rows;
+        const newItems = response.data.rows;
         setTotalItems(response.data.count);
-        setItems(newUsers);
+        setItems(newItems);
       })
       .catch((error) => console.error(error));
   }, [locationName, sortingOptions, pageNumber, setTotalItems, setItems]);
 
   return (
     <div className="p-3">
-      <HeaderComponent onSubmit={handleSubmit}></HeaderComponent>
-      <ItemsTable
-        items={items}
+      <Header onSubmit={handleSubmit} />
+      <ItemsTable items={items} />
+      <Footer
+        totalItems={totalItems}
         currentPage={pageNumber}
         onPageChange={(pageNumber: number) => setPageNumber(pageNumber)}
-        totalItems={totalItems}
-      ></ItemsTable>
+      />
     </div>
   );
 };
