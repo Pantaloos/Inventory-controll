@@ -1,52 +1,32 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import Pagination from "react-bootstrap/Pagination";
 import axios from "axios";
-
-interface Item {
-  id: string;
-  name: string;
-  location: string;
-  price: number;
-}
 
 const clamp = (num: number, min: number, max: number) => {
   return Math.max(min, Math.min(num, max));
 };
 
-const ItemsTable = () => {
-  const [items, setItems] = useState<Item[]>([]);
+const ItemsTable = (props: any) => {
+  const { items, totalItems, currentPage } = props;
   const [currentValue, setCurrentValue] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
-  const numPages = Math.ceil(items.length / itemsPerPage);
-
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const endIdx = startIdx + itemsPerPage;
-  const itemsToDisplay = items.slice(startIdx, endIdx);
+  const numPages = Math.ceil(totalItems / itemsPerPage);
 
   const paginationButtons = [];
   const maxButtons = 10;
   const ellipsis = <Pagination.Ellipsis disabled />;
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/items")
-      .then((response) => {
-        const newUsers = response.data;
-        setItems(newUsers);
-      })
-      .catch((error) => console.error(error));
-  }, []);
-
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setCurrentValue(clamp(parseInt(e.target.value), 1, numPages));
   }
   function handlePageClick(pageNumber: number) {
-    setCurrentPage(pageNumber);
+    if (props.onPageChange) {
+      props.onPageChange(pageNumber);
+    }
   }
 
   const handleDeleteItem = (itemID: string) => {
-    axios.delete(`http://localhost:5000/items/${itemID}`).then(() => {
+    axios.delete(`http://localhost:5000/inventory/${itemID}`).then(() => {
       window.location.reload();
     });
   };
@@ -55,7 +35,7 @@ const ItemsTable = () => {
     for (let i = 1; i <= numPages; i++) {
       paginationButtons.push(
         <Pagination.Item
-          key={i}
+          key={`pagination_${i}`}
           active={i === currentPage}
           onClick={() => handlePageClick(i)}
         >
@@ -77,7 +57,7 @@ const ItemsTable = () => {
     if (buttonsToShow[0] > 2) {
       paginationButtons.push(
         <Pagination.Item
-          key={1}
+          key={"pagination_1"}
           active={1 === currentPage}
           onClick={() => handlePageClick(1)}
         >
@@ -93,7 +73,7 @@ const ItemsTable = () => {
       let page = buttonsToShow[i];
       paginationButtons.push(
         <Pagination.Item
-          key={page}
+          key={`pagination_${page}`}
           active={page === currentPage}
           onClick={() => handlePageClick(page)}
         >
@@ -110,7 +90,7 @@ const ItemsTable = () => {
       }
       paginationButtons.push(
         <Pagination.Item
-          key={numPages}
+          key={`pagination_${numPages}`}
           active={numPages === currentPage}
           onClick={() => handlePageClick(numPages)}
         >
@@ -132,8 +112,8 @@ const ItemsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {itemsToDisplay.map((item) => (
-            <tr key={item.name}>
+          {items.map((item: any) => (
+            <tr key={item.id}>
               <td>{item.name}</td>
               <td>{item.location}</td>
               <td>{item.price}</td>
@@ -195,7 +175,7 @@ const ItemsTable = () => {
             />
           </div>
         </nav>
-        Total Items: {items.length}
+        Total Items: {totalItems}
       </div>
     </div>
   );
